@@ -30,22 +30,29 @@ const ErrorType = {
         isShowStackTrace: true,
     },
 
-    INVALID_PASSWORD_LENGTH: {
+    USERNAME_ALREADY_EXISTS: {
         id: 5,
+        httpCode: 409,
+        message: "Username already exists, please try another one",
+        isShowStackTrace: true,
+    },
+
+    INVALID_PASSWORD_LENGTH: {
+        id: 6,
         httpCode: 422,
         message: "Password Length Should Be between 4-10",
         isShowStackTrace: true,
     },
 
     INVALID_USERNAME: {
-        id: 6,
+        id: 7,
         httpCode: 422,
         message: "Unacceptable username, please try a different one",
         isShowStackTrace: true,
     },
 
     INVALID_FIRST_NAME_LENGTH: {
-        id: 7,
+        id: 8,
         httpCode: 422,
         message: "Username Length Should Be between 3-10",
         isShowStackTrace: true,

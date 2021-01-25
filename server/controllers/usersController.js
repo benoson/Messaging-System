@@ -3,7 +3,7 @@ const router = express.Router();
 const usersLogic = require('../logic/usersLogic');
 
 
-router.post('/register', async (request, response, next) => {
+router.post('/', async (request, response, next) => {
 
     // extraction the registration data that was sent
     const registrationInfo = request.body;

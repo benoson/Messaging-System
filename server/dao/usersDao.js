@@ -2,14 +2,42 @@ let connection = require("./connectionWrapper");
 let ErrorType = require("../errors/errorType");
 let ServerError = require("../errors/serverError");
 
+
 /**
  * Adds a user to the DB
- * @param {{username: string, password: string | number}} userInfo 
+ * @param {{username: string, password: string | number}} registrationInfo 
  */
-const addUser = async (userInfo) => {
+const isUsernameAlreadyExist = async (registrationInfo) => {
+    // Creating an SQL query to check if a given username already exists
+    const SQL = "SELECT USERNAME FROM users WHERE USERNAME = ?";
+    const parameters = [registrationInfo.username];
+    
+    try {
+        // sending the SQL query with the registration data
+        const response = await connection.executeWithParameters(SQL, parameters);
+
+        // determines what to send, based on the reponse from the DB
+        if (response.length === 0) {
+            return false;
+        }
+
+        return true;
+    }
+    
+    catch (error) {
+        // throwing a technical Error
+        throw new ServerError(ErrorType.GENERAL_ERROR, SQL, error);
+    }
+}
+
+/**
+ * Adds a user to the DB
+ * @param {{username: string, password: string | number}} registrationInfo 
+ */
+const addUser = async (registrationInfo) => {
     // Creating an SQL query for inserting a new user to the DB
-    const SQL = "INSERT INTO users (User_ID, First_Name, Last_Name, User_Name, Password, City, Street, User_Type) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    const parameters = [userInfo.ID, userInfo.firstName, userInfo.lastName, userInfo.email, userInfo.hashedPassword, userInfo.city, userInfo.street, "CUSTOMER"];
+    const SQL = "INSERT INTO users (USERNAME, PASSWORD) VALUES (?, ?)";
+    const parameters = [registrationInfo.username, registrationInfo.password];
     
     try {
         // sending the SQL query with the registration data
@@ -22,14 +50,18 @@ const addUser = async (userInfo) => {
     }
 }
 
-const login = async (user) => {
+/**
+ * Attemps to log in a user
+ * @param {{email: string, hashedPassword: string}} userLoginInfo 
+ */
+const login = async (userLoginInfo) => {
     // Creating the SQL query to get the user from the DB
-    const SQL = "SELECT User_ID as ID, User_Type as userType, First_Name as firstName FROM users where User_Name =? and Password =?";
-    const parameters = [user.email, user.hashedPassword];
+    const SQL = "SELECT ID, USERNAME as username FROM users where USERNAME = ? and PASSWORD = ?";
+    const parameters = [userLoginInfo.username, userLoginInfo.password];
     let userLoginResult;
 
     try {
-        // Sending the SQL query and the user's login data to the 'connection wrapper' preset
+        // Sending the SQL query with the user's info to the DB
         userLoginResult = await connection.executeWithParameters(SQL, parameters);
     }
 
@@ -38,16 +70,17 @@ const login = async (user) => {
         throw new ServerError(ErrorType.GENERAL_ERROR, SQL, error);
     }
 
-    // If the user was not found in the DB
-    if (userLoginResult === null || userLoginResult.length === 0) {
+    // In case the user was not found in the DB
+    if (userLoginResult.length === 0) {
         throw new ServerError(ErrorType.USER_IS_NOT_AUTHENTICATED);
     }
 
-    // In case the procedure went well, and we found the user in the DB
+    // Returning the user that was found
     return userLoginResult[0];
 }
 
 module.exports = {
     login,
-    addUser
+    addUser,
+    isUsernameAlreadyExist
 };
