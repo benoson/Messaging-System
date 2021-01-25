@@ -1,0 +1,14 @@
+.composeEmailPage {
+    padding: 1rem 3rem 3rem 3rem;
+    flex: 1;
+}
+
+.composeEmailHeader {
+    font-weight: 300;
+}
+
+.composeEmailForm {
+    width: 500px;
+    display: flex;
+    flex-direction: column;
+}
