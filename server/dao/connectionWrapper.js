@@ -16,7 +16,7 @@ connection.connect( error => {
         return;
     }
 
-    console.log('You are connected to MySQL!');
+    console.log('Connected to DB');
 });
 
 /**

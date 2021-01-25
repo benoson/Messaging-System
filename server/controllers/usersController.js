@@ -17,4 +17,18 @@ router.post('/', async (request, response, next) => {
     }
 });
 
+router.post('/login', async (request, response, next) => {
+
+    // extraction the registration data that was sent
+    const loginInfo = request.body;
+    
+    try {
+        const succesfullLoginResponse = await usersLogic.login(loginInfo);
+        response.json(succesfullLoginResponse);
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+
 module.exports = router;
