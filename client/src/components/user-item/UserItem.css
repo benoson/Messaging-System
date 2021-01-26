@@ -1,0 +1,8 @@
+.userItem {
+    width: 100%;
+    background-color: lightseagreen;
+    color: white;
+    border-bottom: 1px solid white;
+    padding: 1rem;
+    text-align: center;
+}

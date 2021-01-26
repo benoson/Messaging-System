@@ -8,7 +8,19 @@
 }
 
 .composeEmailForm {
-    width: 500px;
+    display: flex;
+}
+
+.composeEmailSectionLeft, .composeEmailSectionRight {
     display: flex;
     flex-direction: column;
+    margin: 2rem;
+}
+
+.composeEmailSectionLeft {
+    width: 500px;
+}
+
+.allUsersItemsSection {
+    margin-top: 1rem;
 }
