@@ -1,0 +1,11 @@
+.welcomePageSection {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 3rem;
+}
+
+.divider {
+    width: 2px;
+    background: rgba(165, 165, 165, 0.671);
+}

@@ -1,3 +1,7 @@
-.dividedSection {
+.dividedSections {
     display: flex;
+}
+
+.mainContent {
+    width: 100%;
 }

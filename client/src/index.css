@@ -16,3 +16,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.sectionHeader {
+  font-weight: 300;
+  text-align: center;
+}

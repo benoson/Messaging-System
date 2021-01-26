@@ -1,20 +1,9 @@
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react';
-import StyledButton from '../custom-button/CustomButton';
-import UserItem from '../user-item/UserItem';
+import CustomButton from '../custom-button/CustomButton';
+import SearchUsersSection from '../search-users/SearchUsersSection';
 import './ComposeEmailPage.css';
 
 export default function ComposeEmailPage() {
-
-    const [searchedUsers, setSearchedUsers] = useState(null);
-
-    const x = [
-        {username: "benoson"},
-        {username: "benoson2"},
-        {username: "benoson3"},
-        {username: "benoson4"},
-        {username: "benoson5"},
-    ]
 
     return (
         <div className="composeEmailPage">
@@ -35,17 +24,17 @@ export default function ComposeEmailPage() {
                         variant="outlined"
                     />
 
-                    <StyledButton buttonText="Send" />
+                    <CustomButton
+                        buttonText="Send"
+                        backgroundColor="transparent"
+                        textColor="lightseagreen"
+                        borderColor="lightseagreen"
+                        hoverBgColor="lightseagreen"
+                        hoverTextColor="white"
+                    />
                 </div>
 
-                <div className="composeEmailSectionRight">
-                    <TextField required id="standard-required" label="Search For a User" />
-                    <div className="allUsersItemsSection">
-                        {x.map( (value, index) => 
-                            <UserItem key={index} username={value.username} />
-                        )}
-                    </div>
-                </div>
+                <SearchUsersSection />
             </form>
 
         </div>

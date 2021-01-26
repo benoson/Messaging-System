@@ -2,26 +2,30 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import LeftSidebar from './sidebar/LeftSidebar';
 import Navbar from './navbar/Navbar';
 import ComposeEmailPage from './compose-email-page/ComposeEmailPage';
+import WelcomePage from './welcome-page/WelcomePage';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Navbar />
-
-      <div className="dividedSection">
-        <LeftSidebar />
-
         <BrowserRouter>
-          <Switch>
-            <Route path="/myEmails" component={ComposeEmailPage} exact />
-            <Route path="/compose" component={ComposeEmailPage} exact />
-            
-            <Redirect from="/" to="/welcome" exact />
-          </Switch>
+          <Navbar />
+          
+          <div className="dividedSections">
+              <LeftSidebar />
 
-        </BrowserRouter>
-      </div>
+              <div className="mainContent">
+                <Switch>
+                  <Route path="/welcome" component={WelcomePage} exact />
+                  <Route path="/myEmails" component={ComposeEmailPage} exact />
+                  <Route path="/compose" component={ComposeEmailPage} exact />
+
+                  <Redirect from="/" to="/welcome" exact />
+                </Switch>
+              </div>
+          </div>
+
+          </BrowserRouter>
     </div>
   );
 }

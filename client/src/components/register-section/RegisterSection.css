@@ -1,0 +1,12 @@
+.registerSection {
+    flex: 0.2;
+}
+
+.registerForm {
+    display: flex;
+    flex-direction: column;
+}
+
+#registerButton {
+    margin-top: 1rem;
+}

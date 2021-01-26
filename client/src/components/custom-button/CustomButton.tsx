@@ -1,24 +1,29 @@
 import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-interface ButtonText {
+interface ButtonProps {
     buttonText: string;
+    backgroundColor: string;
+    textColor: string;
+    borderColor: string;
+    hoverBgColor: string;
+    hoverTextColor: string;
 }
 
-export default function StyledButton({buttonText}: ButtonText) {
+export default function CustomButton({buttonText, backgroundColor, textColor, borderColor, hoverBgColor, hoverTextColor}: ButtonProps) {
 
     const StyledButton = withStyles({
         root: {
-          background: 'transparent',
-          '&:hover': {background: "lightseagreen", color: "white"},
+          background: backgroundColor,
+          '&:hover': {background: hoverBgColor, color: hoverTextColor},
           borderRadius: 3,
-          border: "1px solid lightseagreen",
-          color: 'lightseagreen',
+          border: `1px solid ${borderColor}`,
+          color: textColor,
           height: 48,
           padding: '0 30px',
           marginBottom: "1rem",
           width: "100%",
-          transition: "0.6s ease",
+          transition: "0.6s ease"
         },
         label: {
           textTransform: 'capitalize',
