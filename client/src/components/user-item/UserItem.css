@@ -1,9 +1,14 @@
 .userItem {
     width: 100%;
-    background-color: lightseagreen;
-    color: white;
+    border-bottom: 1px solid lightseagreen;
     padding: 1rem;
     margin-bottom: 3px;
     text-align: center;
     cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.userItem:hover {
+    background-color: lightseagreen;
+    color: white;
 }

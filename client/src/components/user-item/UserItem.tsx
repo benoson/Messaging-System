@@ -7,7 +7,7 @@ import './UserItem.css';
 export default function UserItem(user: User) {
 
     const handleSearchedUserClick = ():void  => {
-        Store.dispatch({type: ActionType.UpdateMessageReceiver, payload: user.ID});
+        Store.dispatch({type: ActionType.UpdateMessageReceiver, payload: {ID: user.ID, username: user.username}});
     }
 
     return (

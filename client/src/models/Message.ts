@@ -1,9 +1,8 @@
 export default class Message {
     public constructor(
         public subject: string,
-        public message: string,
+        public content: string,
         public receiverUsername: string,
-        public receiverID: number | undefined,
-        public senderID: number | undefined
+        public receiverID: number | null
     ) {}
 }

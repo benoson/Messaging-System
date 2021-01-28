@@ -1,6 +1,5 @@
-import { Divider, TextField } from '@material-ui/core'
+import { TextField } from '@material-ui/core'
 import { ChangeEvent, useEffect, useState } from 'react';
-import Message from '../../models/Message';
 import User from '../../models/User';
 import Store from '../../redux/Store';
 import UsersUtils from '../../Utils/UsersUtils';
@@ -10,13 +9,23 @@ import './SearchUsersSection.css';
 
 export default function SearchUsersSection() {
 
-    const [message, setMessage] = useState(new Message("", "", "", undefined, undefined));
+    const [messageReceiver, setMessageReceiver] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [allUsers, setAllUsers] = useState<User[]>(new Array<User>());
     const [filteredUsers, setFilteredUsers] = useState<User[]>(new Array<User>());
 
     useEffect(() => {
+
         checkIfShouldGetAllUsersFromServer();
+
+        const unsubscribe = Store.subscribe(() => {
+            const composedMessageFromStore = Store.getState().composedMessage;
+            setMessageReceiver(composedMessageFromStore.receiverUsername);
+        });
+
+        return () => {
+            unsubscribe();
+        }
     }, []);
 
 
@@ -41,9 +50,9 @@ export default function SearchUsersSection() {
 
     return (
         <div className="composeEmailSectionRight">
-            <TextField onChange={onSearchUserInputChange} value={searchValue} required id="standard-required" label="Search For a User" />
-            <h3 className="sharpText">{message.receiverUsername}</h3>
-            <Divider />
+            <TextField onChange={onSearchUserInputChange} value={searchValue} required label="Search For a User" />
+            {messageReceiver.trim() !== "" && <h3 className="receiverText">To: {messageReceiver}</h3>}
+
             <div className="allUsersItemsSection">
                 {filteredUsers.map( (user, index) => 
                     <UserItem key={index} {...user} />

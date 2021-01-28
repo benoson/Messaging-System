@@ -15,7 +15,7 @@ class InitialState {
 const initialState = new InitialState(
   new Array <User>(),
   new Array <Message>(),
-  new Message("", "", "", undefined, undefined)
+  new Message("", "", "", null)
 );
 
 
@@ -27,8 +27,19 @@ export default function appReducer(state = initialState, action: Action) {
 
     case ActionType.UpdateMessageReceiver:
       const updatedComposedMessage = state.composedMessage;
-      updatedComposedMessage.receiverID = action.payload;
+      updatedComposedMessage.receiverID = action.payload.ID;
+      updatedComposedMessage.receiverUsername = action.payload.username;
       return new InitialState([...state.allUsers], [...state.allUserMessages], updatedComposedMessage);
+
+    case ActionType.UpdateMessageSubject:
+      const updatedComposed = state.composedMessage;
+      composedMessage.subject = action.payload;
+      return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
+
+    case ActionType.UpdateMessageContent:
+      const composedMessage = state.composedMessage;
+      composedMessage.subject = action.payload;
+      return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
 
   default:
     return state;
