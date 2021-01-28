@@ -2,7 +2,8 @@
     width: 100%;
     background-color: lightseagreen;
     color: white;
-    border-bottom: 1px solid white;
     padding: 1rem;
+    margin-bottom: 3px;
     text-align: center;
+    cursor: pointer;
 }

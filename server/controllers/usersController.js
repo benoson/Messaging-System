@@ -3,6 +3,17 @@ const router = express.Router();
 const usersLogic = require('../logic/usersLogic');
 
 
+router.get('/', async (request, response, next) => {
+
+    try {
+        const allUsers = await usersLogic.getAllUsers();
+        response.json(allUsers);
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+
 router.post('/', async (request, response, next) => {
 
     // extraction the registration data that was sent

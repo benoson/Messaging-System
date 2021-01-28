@@ -1,14 +1,18 @@
+import User from '../../models/User';
+import { ActionType } from '../../redux/ActionType';
+import Store from '../../redux/Store';
 import './UserItem.css';
 
-interface UserItemType {
-    username: string;
-}
 
-export default function UserItem({username}: UserItemType) {
+export default function UserItem(user: User) {
+
+    const handleSearchedUserClick = ():void  => {
+        Store.dispatch({type: ActionType.UpdateMessageReceiver, payload: user.ID});
+    }
 
     return (
-        <div className="userItem">
-            <p>{username}</p>
+        <div className="userItem" onClick={handleSearchedUserClick}>
+            <p>{user.username}</p>
         </div>
     )
 }

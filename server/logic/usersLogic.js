@@ -5,6 +5,11 @@ const usersDao = require('../dao/usersDao');
 const SuccesfulLoginServerResponse = require('../models/SuccesfulLoginServerResponse');
 const ServerCacheDetails = require('../cache/ServerCacheDetails');
 
+
+const getAllUsers = async () => {
+    return await usersDao.getAllUsers();
+}
+
 const addUser = async (registrationInfo) => {
 
     // validating that the username is not taken
@@ -66,5 +71,6 @@ const login = async (registrationInfo, isFreshUser) => {
 
 module.exports = {
     addUser,
-    login
+    login,
+    getAllUsers
 }

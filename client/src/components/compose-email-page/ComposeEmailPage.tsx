@@ -1,6 +1,6 @@
 import TextField from '@material-ui/core/TextField';
 import CustomButton from '../custom-button/CustomButton';
-import SearchUsersSection from '../search-users/SearchUsersSection';
+import SearchUsersSection from '../search-users-section/SearchUsersSection';
 import './ComposeEmailPage.css';
 
 export default function ComposeEmailPage() {
@@ -11,14 +11,14 @@ export default function ComposeEmailPage() {
 
             <form className="composeEmailForm">
                 <div className="composeEmailSectionLeft">
-                    <TextField required className="inputField" margin="normal" label="Subject" variant="outlined" />
+                    <TextField className="inputField" label="Subject" />
 
                     <TextField
                         required
                         id="messageInput"
                         margin="normal"
                         className="inputField"
-                        label="Compose your message"
+                        label="Your message"
                         multiline
                         rows={12}
                         variant="outlined"
