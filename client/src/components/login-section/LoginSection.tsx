@@ -1,5 +1,6 @@
 import { Button, TextField } from '@material-ui/core';
 import { ChangeEvent, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import UserCredentialsDetails from '../../models/UserCredentialsDetails';
 import UsersUtils from '../../Utils/UsersUtils';
 import './LoginSection.css';
@@ -9,10 +10,12 @@ export default function LoginSection() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const onLoginClick = async (): Promise<void> => {
         const newLoginData = new UserCredentialsDetails(username, password);
         await UsersUtils.login(newLoginData);
+        history.push("/myEmails");
     }
 
     const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {

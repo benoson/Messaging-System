@@ -2,16 +2,19 @@ import { Button, TextField } from '@material-ui/core';
 import { ChangeEvent, useState } from 'react';
 import UserCredentialsDetails from '../../models/UserCredentialsDetails';
 import UsersUtils from '../../Utils/UsersUtils';
+import { useHistory } from 'react-router-dom';
 import './RegisterSection.css';
 
 export default function RegisterSection() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const history = useHistory();
 
     const onRegisterClick = async (): Promise<void> => {
         const newLoginData = new UserCredentialsDetails(username, password);
-        await UsersUtils.login(newLoginData);
+        await UsersUtils.register(newLoginData);
+        history.push("/myEmails");
     }
 
     const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {

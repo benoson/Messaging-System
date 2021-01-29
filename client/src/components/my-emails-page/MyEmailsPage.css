@@ -1,0 +1,11 @@
+.myEmailsContainer {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
+    padding: 1rem 3rem 3rem 3rem;
+}
+
+.myEmailsHeader {
+    font-weight: 300;
+    margin-bottom: 3rem;
+}

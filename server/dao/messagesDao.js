@@ -4,7 +4,7 @@ let ServerError = require("../errors/serverError");
 
 
 const getAllUserEmails = async (userID) => {
-    const SQL = "SELECT (SELECT USERNAME FROM users WHERE ID = messages.ID) as sender, MESSAGE as content, SUBJECT as subject, CREATION_DATE as creationDate FROM messages WHERE RECEIVER = ?";
+    const SQL = "SELECT (SELECT USERNAME FROM users WHERE ID = messages.ID) as senderUsername, MESSAGE as content, SUBJECT as subject, DATE_FORMAT(CREATION_DATE, '%d/%m/%Y') as creationDate FROM messages WHERE RECEIVER = ?";
     const parameters = [userID];
     
     try {

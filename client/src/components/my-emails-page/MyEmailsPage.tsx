@@ -3,6 +3,8 @@ import ReceivedMessage from "../../models/ReceivedMessage";
 import Store from "../../redux/Store";
 import MessagesUtils from "../../Utils/MessagesUtils";
 import Email from "../email/Email";
+import './MyEmailsPage.css';
+
 
 export default function MyEmails() {
 
@@ -24,15 +26,19 @@ export default function MyEmails() {
     const checkIfShuoldGetAllEmailsFromServer = async (): Promise<void> => {
         const allUserMessagesFromStore = Store.getState().allUserMessages;
         if (allUserMessagesFromStore.length === 0) {
-            MessagesUtils.getAllUserMessagesFromServer();
+            await MessagesUtils.getAllUserMessagesFromServer();
+        }
+        else {
+            setMyEmails(allUserMessagesFromStore);
         }
     }
 
     return (
         <div className="myEmailsContainer">
-            {myEmails.map( (email, index) => {
+            <h1 className="myEmailsHeader">My Emails</h1>
+            {myEmails.map( (email, index) => 
                 <Email key={index} {...email} />
-            })}
+            )}
         </div>
     )
 }

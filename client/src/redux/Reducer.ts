@@ -41,6 +41,11 @@ export default function appReducer(state = initialState, action: Action) {
       composedMessage.content = action.payload;
       return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
 
+    case ActionType.UpdateAllUserMessages:
+      const allUserMessages = action.payload;
+      return new InitialState([...state.allUsers], allUserMessages, composedMessage);
+
+
   default:
     return state;
   }

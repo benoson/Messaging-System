@@ -1,5 +1,21 @@
 .email {
-    background: rgb(138, 141, 145);
-    border: 1px solid lightseagreen;
-    border-radius: 4px;
+    padding: 7px;
+}
+
+.email:nth-child(odd) {
+    background-color: rgba(218, 218, 218, 0.719);
+}
+
+.sharp {
+    font-weight: 300;
+}
+
+.contentText {
+    color: purple;
+}
+
+.bottomEmailSection {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
 }
