@@ -1,7 +1,10 @@
 import TextField from '@material-ui/core/TextField';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { ChangeEvent } from 'react';
 import { ActionType } from '../../redux/ActionType';
 import Store from '../../redux/Store';
+import MessagesUtils from '../../Utils/MessagesUtils';
 import CustomButton from '../custom-button/CustomButton';
 import SearchUsersSection from '../search-users-section/SearchUsersSection';
 import './ComposeEmailPage.css';
@@ -9,22 +12,18 @@ import './ComposeEmailPage.css';
 
 export default function ComposeEmailPage() {
 
-    const [messageSubject, setMessageSubject] = useState("");
-    const [messageContent, setMessageContent] = useState("");
-    
-    useEffect(() => {
+    const [receiver, setReceiver] = useState("");
 
+    useEffect(() => {
         const unsubscribe = Store.subscribe(() => {
-            const composedMessageFromStore = Store.getState().composedMessage;
-            setMessageSubject(composedMessageFromStore.subject);
-            setMessageContent(composedMessageFromStore.content);
+            const messageReceiver = Store.getState().composedMessage.receiverUsername;
+            setReceiver(messageReceiver);
         });
 
         return () => {
             unsubscribe();
         }
     }, []);
-
 
     const handleSubjectValueChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const subjectInput: HTMLInputElement = event.target;
@@ -38,16 +37,21 @@ export default function ComposeEmailPage() {
         Store.dispatch({type: ActionType.UpdateMessageContent, payload: contentValue});
     }
 
+    const onSendMessageClick = (): void => {
+        const composedMessageFromStore = Store.getState().composedMessage;
+        MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
+    }
+
+
     return (
         <div className="composeEmailPage">
-            <h1 className="composeEmailHeader">Compose Your Email</h1>
+            <h1 className="composeEmailHeader">Compose An Email</h1>
 
             <form className="composeEmailForm">
                 <div className="composeEmailSectionLeft">
-                    <TextField value={messageSubject} className="inputField" label="Subject" onChange={handleSubjectValueChange} />
+                    <TextField className="inputField" label="Subject" onChange={handleSubjectValueChange} />
 
                     <TextField
-                        value={messageContent}
                         required
                         id="messageInput"
                         margin="normal"
@@ -59,6 +63,8 @@ export default function ComposeEmailPage() {
                         onChange={handleMessageContentValueChange}
                     />
 
+                    {receiver.trim() !== "" && <h2 className="receiverText">Sending To: <span className="receiverName">{receiver}</span></h2>}
+
                     <CustomButton
                         buttonText="Send"
                         backgroundColor="transparent"
@@ -66,12 +72,12 @@ export default function ComposeEmailPage() {
                         borderColor="lightseagreen"
                         hoverBgColor="lightseagreen"
                         hoverTextColor="white"
+                        toggleFunction={onSendMessageClick}
                     />
                 </div>
 
                 <SearchUsersSection />
             </form>
-
         </div>
     )
 }

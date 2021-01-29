@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { ActionType } from '../../redux/ActionType';
 import Store from '../../redux/Store';
 import UsersUtils from '../../Utils/UsersUtils';
 import LoginSection from '../login-section/LoginSection';
@@ -10,12 +9,15 @@ import './WelcomePage.css';
 export default function WelcomePage() {
 
     useEffect(() => {
-        getAllUsersFromServer();
+        checkIfShouldGetAllUsersFromServer();
     }, []);
 
-    const getAllUsersFromServer = async() => {
-        const allUsersFromServer = await UsersUtils.getAllUsersFromServer();
-        Store.dispatch({type: ActionType.UpdateAllUsers, payload: allUsersFromServer});
+
+    const checkIfShouldGetAllUsersFromServer = async (): Promise<void> => {
+        const allUsersFromStore = Store.getState().allUsers;
+        if (allUsersFromStore.length === 0) {
+            await UsersUtils.getAllUsersFromServer();
+        }
     }
 
     return (

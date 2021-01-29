@@ -15,12 +15,11 @@ export default function SearchUsersSection() {
     const [filteredUsers, setFilteredUsers] = useState<User[]>(new Array<User>());
 
     useEffect(() => {
-
         checkIfShouldGetAllUsersFromServer();
-
+        
         const unsubscribe = Store.subscribe(() => {
-            const composedMessageFromStore = Store.getState().composedMessage;
-            setMessageReceiver(composedMessageFromStore.receiverUsername);
+            const allUsersFromStore = Store.getState().allUsers;
+            setAllUsers(allUsersFromStore);
         });
 
         return () => {
@@ -32,8 +31,7 @@ export default function SearchUsersSection() {
     const checkIfShouldGetAllUsersFromServer = async (): Promise<void> => {
         const allUsersFromStore = Store.getState().allUsers;
         if (allUsersFromStore.length === 0) {
-            const allUsersFormServer = await UsersUtils.getAllUsersFromServer();
-            setAllUsers(allUsersFormServer);
+            await UsersUtils.getAllUsersFromServer();
         }
         else {
             setAllUsers(allUsersFromStore);

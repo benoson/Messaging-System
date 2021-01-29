@@ -93,7 +93,7 @@ class UsersUtils {
     }
 
 
-    // ----- Is logged checker
+    // ----- Account
 
     static isUserLoggedIn = (request) => {
         const authorizationString = request.headers['authorization'];

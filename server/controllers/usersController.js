@@ -16,7 +16,6 @@ router.get('/', async (request, response, next) => {
 
 router.post('/', async (request, response, next) => {
 
-    // extraction the registration data that was sent
     const registrationInfo = request.body;
     
     try {
@@ -30,7 +29,6 @@ router.post('/', async (request, response, next) => {
 
 router.post('/login', async (request, response, next) => {
 
-    // extraction the registration data that was sent
     const loginInfo = request.body;
     
     try {

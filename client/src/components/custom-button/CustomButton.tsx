@@ -8,9 +8,10 @@ interface ButtonProps {
     borderColor: string;
     hoverBgColor: string;
     hoverTextColor: string;
+    toggleFunction?: (param?: any) => void;
 }
 
-export default function CustomButton({buttonText, backgroundColor, textColor, borderColor, hoverBgColor, hoverTextColor}: ButtonProps) {
+export default function CustomButton({buttonText, backgroundColor, textColor, borderColor, hoverBgColor, hoverTextColor, toggleFunction}: ButtonProps) {
 
     const StyledButton = withStyles({
         root: {
@@ -32,7 +33,7 @@ export default function CustomButton({buttonText, backgroundColor, textColor, bo
     
     return (
         <div>
-            <StyledButton variant="outlined" className="sidebarButon">{buttonText}</StyledButton>
+            <StyledButton onClick={toggleFunction} variant="outlined" className="sidebarButon">{buttonText}</StyledButton>
         </div>
     )
 }

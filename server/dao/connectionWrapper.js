@@ -43,6 +43,7 @@ function executeWithParameters(SQL, parameters) {
     return new Promise( (resolve, reject) => {
         connection.execute(SQL, parameters, (error, result) => {
             if (error) {
+                console.log(error);
                 console.log("Failed interacting with DB, calling reject");
                 reject(error);
                 return;

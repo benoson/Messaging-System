@@ -7,6 +7,7 @@ function authenticateJwtRequestToken() {
     return expressJwt({ secret, algorithms: ['HS256'] }).unless({
         path: [
             '/users/',
+            '/users/login'
         ]
     });
 }

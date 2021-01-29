@@ -1,4 +1,5 @@
 import Message from "../models/Message";
+import ReceivedMessage from "../models/ReceivedMessage";
 import User from "../models/User";
 import Action from "./Action";
 import { ActionType } from "./ActionType";
@@ -7,38 +8,37 @@ import { ActionType } from "./ActionType";
 class InitialState {
   public constructor(
     public allUsers: User[],
-    public allUserMessages: Message[],
+    public allUserMessages: ReceivedMessage[],
     public composedMessage: Message
   ) { }
 }
 
 const initialState = new InitialState(
   new Array <User>(),
-  new Array <Message>(),
+  new Array <ReceivedMessage>(),
   new Message("", "", "", null)
 );
 
 
 export default function appReducer(state = initialState, action: Action) {
 
+  const composedMessage = state.composedMessage;
+
   switch (action.type) {
     case ActionType.UpdateAllUsers:
-      return new InitialState(action.payload, [...state.allUserMessages], state.composedMessage);
+      return new InitialState(action.payload, [...state.allUserMessages], composedMessage);
 
     case ActionType.UpdateMessageReceiver:
-      const updatedComposedMessage = state.composedMessage;
-      updatedComposedMessage.receiverID = action.payload.ID;
-      updatedComposedMessage.receiverUsername = action.payload.username;
-      return new InitialState([...state.allUsers], [...state.allUserMessages], updatedComposedMessage);
+      composedMessage.receiverID = action.payload.ID;
+      composedMessage.receiverUsername = action.payload.username;
+      return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
 
     case ActionType.UpdateMessageSubject:
-      const updatedComposed = state.composedMessage;
       composedMessage.subject = action.payload;
       return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
 
     case ActionType.UpdateMessageContent:
-      const composedMessage = state.composedMessage;
-      composedMessage.subject = action.payload;
+      composedMessage.content = action.payload;
       return new InitialState([...state.allUsers], [...state.allUserMessages], composedMessage);
 
   default:

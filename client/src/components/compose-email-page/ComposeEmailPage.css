@@ -24,3 +24,13 @@
 .allUsersItemsSection {
     margin-top: 1rem;
 }
+
+.receiverText {
+    margin: 10px 0;
+    font-weight: 400;
+    color: rgb(0, 102, 128);
+}
+
+.receiverName {
+    color: lightseagreen;
+}

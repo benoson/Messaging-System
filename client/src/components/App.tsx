@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import LeftSidebar from './sidebar/LeftSidebar';
 import Navbar from './navbar/Navbar';
 import ComposeEmailPage from './compose-email-page/ComposeEmailPage';
+import MyEmailsPage from './my-emails-page/MyEmailsPage';
 import WelcomePage from './welcome-page/WelcomePage';
 import './App.css';
 
@@ -17,7 +18,7 @@ function App() {
               <div className="mainContent">
                 <Switch>
                   <Route path="/welcome" component={WelcomePage} exact />
-                  <Route path="/myEmails" component={ComposeEmailPage} exact />
+                  <Route path="/myEmails" component={MyEmailsPage} exact />
                   <Route path="/compose" component={ComposeEmailPage} exact />
 
                   <Redirect from="/" to="/welcome" exact />
