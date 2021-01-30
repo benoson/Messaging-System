@@ -10,8 +10,6 @@ class UsersUtils {
     constructor() {};
 
     
-    // ----- Validations
-
     /**
      * Returns `true` if the username and password are valid
      * @param {{username: string, password: string | number}} registrationInfo 
@@ -53,9 +51,6 @@ class UsersUtils {
         throw new ServerError(ErrorType.INVALID_USERNAME);
     };
 
-
-    // ----- Hashing and Salting
-
     /**
      * Returns a salted password based on a string
      * @param {string} password
@@ -93,8 +88,6 @@ class UsersUtils {
     }
 
 
-    // ----- Account
-
     static isUserLoggedIn = (request) => {
         const authorizationString = request.headers['authorization'];
         const token = authorizationString.substring("Bearer ".length);
@@ -104,9 +97,6 @@ class UsersUtils {
         }
         return false;
     }
-
-
-    // ----- Caching
 
     /**
      * Saves a succesfull login response from the DB into the users cache

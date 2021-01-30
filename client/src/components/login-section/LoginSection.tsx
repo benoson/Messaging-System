@@ -3,6 +3,7 @@ import { ChangeEvent, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import UserCredentialsDetails from '../../models/UserCredentialsDetails';
 import UsersUtils from '../../Utils/UsersUtils';
+import Socket from '../../socket/socket';
 import './LoginSection.css';
 
 
@@ -11,11 +12,21 @@ export default function LoginSection() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const history = useHistory();
+    const socket = Socket.Instance;
+
 
     const onLoginClick = async (): Promise<void> => {
         const newLoginData = new UserCredentialsDetails(username, password);
-        await UsersUtils.login(newLoginData);
-        history.push("/myEmails");
+        if (UsersUtils.validateCredentials(newLoginData)) {
+            try {
+                await UsersUtils.login(newLoginData);
+                socket.initiateSocket();
+                history.push("/myEmails");
+            }
+            catch (error) {
+                alert(error);
+            }
+        }
     }
 
     const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {

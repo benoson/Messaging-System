@@ -9,7 +9,6 @@ import './SearchUsersSection.css';
 
 export default function SearchUsersSection() {
 
-    const [messageReceiver, setMessageReceiver] = useState("");
     const [searchValue, setSearchValue] = useState("");
     const [allUsers, setAllUsers] = useState<User[]>(new Array<User>());
     const [filteredUsers, setFilteredUsers] = useState<User[]>(new Array<User>());
@@ -49,7 +48,6 @@ export default function SearchUsersSection() {
     return (
         <div className="composeEmailSectionRight">
             <TextField onChange={onSearchUserInputChange} value={searchValue} required label="Search For a User" />
-            {messageReceiver.trim() !== "" && <h3 className="receiverText">To: {messageReceiver}</h3>}
 
             <div className="allUsersItemsSection">
                 {filteredUsers.map( (user, index) => 

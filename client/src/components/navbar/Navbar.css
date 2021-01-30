@@ -1,7 +1,10 @@
 .navbar {
     background: linear-gradient(to right, lightseagreen,rgb(29, 163, 156));
-    padding: 8px 0;
+    padding: 8px 1rem 0 0;
     box-shadow: 0px 5px 5px 0px #cacaca;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .navbarLogoSection {

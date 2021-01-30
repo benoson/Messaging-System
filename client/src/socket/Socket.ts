@@ -1,44 +1,38 @@
 import socketIOClient from "socket.io-client";
+import ReceivedMessage from "../models/ReceivedMessage";
+import { ActionType } from "../redux/ActionType";
+import Store from "../redux/Store";
 
 export default class Socket {
-    public constructor() {}
-
-    private socket: any;
-
-    private initiateSocket = () => {
-
-        const userInfo = sessionStorage.getItem('userInfo');
-        socketIOClient('http://localhost:3002', { query: "userToken=" + JSON.parse(userInfo!).token});
-        this.registerAllSocketListeners();
+    private static _instance: Socket;
+    public socketConnection: any;
+    public isConnectedToSocket: boolean;
+    
+    private constructor() {
+        this.isConnectedToSocket = false;
     }
 
-    private registerAllSocketListeners = () => {
+    public static get Instance() {
+        return this._instance || (this._instance = new this());
+    }
 
-        // Registering all Socket.io Listeners
-
-        // Registering an 'add vacation' listener, which updates the UI for all the clients
-        this.socket.on('add-vacation', (newlyAddedVacation: Vacation) => {
-            this.addVacationViaSocketIO(newlyAddedVacation);
+    public initiateSocket = (): void => {
+        const userInfo = localStorage.getItem('userInfo');
+        const userToken = JSON.parse(userInfo!).token;
+        this.socketConnection = socketIOClient('http://localhost:3002', { query: "userToken=" + userToken});
+        this.registerSocketListeners();
+        this.isConnectedToSocket = true;
+    }
+    
+    private registerSocketListeners = (): void => {
+    
+        this.socketConnection.on('receive-message', (receivedMessage: ReceivedMessage) => {
+            
+            Store.dispatch({type: ActionType.UpdateSingleMessage, payload: receivedMessage});
         });
+    }
 
-        // Registering an 'update vacation' listener, which updates the UI for all the clients
-        this.socket.on('update-vacation-info', (convertedValidDataForUIDisplay: Vacation) => {
-            this.updateVacationInfoViaSocketIO(convertedValidDataForUIDisplay);
-        });
-
-        // Registering a 'delete vacation' listener, which updates the UI for all the clients
-        this.socket.on('delete-vacation', (clickedVacationID: number) => {
-            this.deleteVacationViaSocketIO(clickedVacationID);
-        });
-
-        // Registering an 'increase vacation followers count' listener, which updates the UI for all the clients
-        this.socket.on('increase-vacation-followers-count', (socketInfo: {clickedVacationID: number, userName: string}) => {
-            this.increaseVacationFollowersCountViaSocketIO(socketInfo);
-        });
-
-        // Registering a 'decrease vacation followers count' listener, which updates the UI for all the clients
-        this.socket.on('decrease-vacation-followers-count', (socketInfo: {clickedVacationID: number, userName: string}) => {
-            this.decreaseVacationFollowersCountViaSocketIO(socketInfo);
-        });
+    public emitMessage = (composedMessage: ReceivedMessage): void => {
+        this.socketConnection.emit('send-message', composedMessage);
     }
 }

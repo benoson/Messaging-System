@@ -3,5 +3,9 @@ export enum ActionType {
     UpdateMessageSubject,
     UpdateMessageContent,
     UpdateMessageReceiver,
-    UpdateAllUserMessages
+    UpdateAllUserMessages,
+    UpdateSingleMessage,
+    DeleteMessage,
+    ChangeLoggedStatus,
+    ClearStore
 }

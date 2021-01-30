@@ -19,9 +19,21 @@ router.post('/', async (request, response, next) => {
     const message = request.body;
     
     try {
-        console.log(message);
         const succesfullMessageIDresponse = await messagesLogic.saveMessage(request, message);
         response.json(succesfullMessageIDresponse);
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+
+router.delete('/:id', async (request, response, next) => {
+
+    const messageID = request.params.id;
+    
+    try {
+        const succesfullDeletionResponse = await messagesLogic.deleteMessage(request, messageID);
+        response.json(succesfullDeletionResponse);
     }
     catch (error) {
         return next(error);

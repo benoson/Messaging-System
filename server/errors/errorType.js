@@ -57,6 +57,29 @@ const ErrorType = {
         message: "Username Length Should Be between 3-10",
         isShowStackTrace: true,
     },
+
+    INVALID_MESSAGE_REVEICER: {
+        id: 9,
+        httpCode: 422,
+        message: "Invalid Message Receiver",
+        isShowStackTrace: true,
+    },
+
+    INVALID_MESSAGE_SUBJECT: {
+        id: 9,
+        httpCode: 422,
+        message: "Invalid Message Subject",
+        isShowStackTrace: true,
+    },
+
+    INVALID_MESSAGE_CONTENT: {
+        id: 9,
+        httpCode: 422,
+        message: "Invalid Message Content",
+        isShowStackTrace: true,
+    }
+
+    
 };
   
   module.exports = ErrorType;

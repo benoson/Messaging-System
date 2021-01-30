@@ -14,8 +14,8 @@ server.use( cors({origin: 'http://localhost:3000'}) );
 server.use(loginFilter());
 server.use('/users', usersController);
 server.use('/messages', messagesController);
-registerSocketConnections(server);
 server.use(errorHandler);
+registerSocketConnections(server);
 
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {

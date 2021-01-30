@@ -2,51 +2,31 @@ const registerSocketConnections = (server) => {
 
     const usersIDSocketMap = require('../models/UsersIDSocketMap');
     const usersDataCache = require('../cache/UsersDataCache');
-
     const http = require('http').createServer(server);
-    const io = require('socket.io')(http);
+    const io = require('socket.io')(http, {
+        cors: {
+          origin: "http://localhost:3000",
+          methods: ["GET", "POST"]
+        }
+    });
 
     io.on('connection', (socket) => {
-
         const handshakeData = socket.request;
-
         const userToken = handshakeData._query['userToken'];
         const userCacheData = usersDataCache.get(userToken);
 
         if (userCacheData !== undefined) {
-            
             const userID = userCacheData.userID;
-    
             usersIDSocketMap.set(userID, socket);
-    
-            socket.on('add-vacation', (newlyAddedVacation) => {
-                io.emit('add-vacation', newlyAddedVacation);
-            });
-        
-            socket.on('update-vacation-info', (updatedVacationData) => {
-                io.emit('update-vacation-info', updatedVacationData);
-            });
-        
-            socket.on('delete-vacation', (clickedVacationID) => {
-                io.emit('delete-vacation', clickedVacationID);
-            });
-        
-            socket.on('increase-vacation-followers-count', (socketInfo) => {
-                io.emit('increase-vacation-followers-count', socketInfo);
-                io.emit('vacation-likes-update');
-            });
-        
-            socket.on('decrease-vacation-followers-count', (socketInfo) => {
-                io.emit('decrease-vacation-followers-count', socketInfo);
-                io.emit('vacation-likes-update');
+
+            socket.on('send-message', (message) => {
+                socket.broadcast.emit('receive-message', message);
             });
         }
 
         socket.on('disconnect', () => {
-
-            let handshakeData = socket.request;
-            let userID = handshakeData._query['userID'];
-    
+            const handshakeData = socket.request;
+            const userID = handshakeData._query['userID'];
             usersIDSocketMap.delete(userID);
         })
     });

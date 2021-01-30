@@ -3,23 +3,35 @@ import ReceivedMessage from "../../models/ReceivedMessage";
 import Store from "../../redux/Store";
 import MessagesUtils from "../../Utils/MessagesUtils";
 import Email from "../email/Email";
+import Socket from '../../socket/socket';
+import UsersUtils from "../../Utils/UsersUtils";
+import { Redirect } from "react-router-dom";
+import NoEmails from "../../assets/No-Emails.svg";
 import './MyEmailsPage.css';
 
 
 export default function MyEmails() {
 
     const [myEmails, setMyEmails] = useState<ReceivedMessage[]>(new Array <ReceivedMessage>());
+    const socket = Socket.Instance;
 
     useEffect(() => {
-        checkIfShuoldGetAllEmailsFromServer();
-        
-        const unsubscribe = Store.subscribe(() => {
-            const allUserMessagesFromStore = Store.getState().allUserMessages;
-            setMyEmails(allUserMessagesFromStore);
-        });
-
-        return () => {
-            unsubscribe();
+        UsersUtils.handleUserLoggedStatus();
+        if (Store.getState().isLogged) {
+    
+            if (!socket.isConnectedToSocket) {
+                socket.initiateSocket();
+            }
+            checkIfShuoldGetAllEmailsFromServer();
+            
+            const unsubscribe = Store.subscribe(() => {
+                const allUserMessagesFromStore = Store.getState().allUserMessages;
+                setMyEmails(allUserMessagesFromStore);
+            });
+    
+            return () => {
+                unsubscribe();
+            }
         }
     }, []);
 
@@ -34,11 +46,25 @@ export default function MyEmails() {
     }
 
     return (
-        <div className="myEmailsContainer">
-            <h1 className="myEmailsHeader">My Emails</h1>
-            {myEmails.map( (email, index) => 
-                <Email key={index} {...email} />
-            )}
-        </div>
+        Store.getState().isLogged ?
+
+            <div className="myEmailsContainer">
+                {myEmails.length > 0 ?
+    
+                    <div>
+                        <h1 className="myEmailsHeader">My Emails</h1>
+                        {myEmails.map( (email, index) =>
+                            <Email key={index} {...email} />
+                        )}
+                    </div>
+                :
+                    <div>
+                        <h1>No Email Yet</h1>
+                        <img className="noEmailsSVG" src={NoEmails} alt="no-emails"/>
+                    </div>}
+            </div>
+
+        :
+        <Redirect to="/welcome" />
     )
 }

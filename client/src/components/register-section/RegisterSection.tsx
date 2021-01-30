@@ -13,8 +13,10 @@ export default function RegisterSection() {
 
     const onRegisterClick = async (): Promise<void> => {
         const newLoginData = new UserCredentialsDetails(username, password);
-        await UsersUtils.register(newLoginData);
-        history.push("/myEmails");
+        if (UsersUtils.validateCredentials(newLoginData)) {
+            await UsersUtils.register(newLoginData);
+            history.push("/myEmails");
+        }
     }
 
     const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {

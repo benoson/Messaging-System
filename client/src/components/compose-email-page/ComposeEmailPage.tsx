@@ -7,21 +7,32 @@ import Store from '../../redux/Store';
 import MessagesUtils from '../../Utils/MessagesUtils';
 import CustomButton from '../custom-button/CustomButton';
 import SearchUsersSection from '../search-users-section/SearchUsersSection';
+import Socket from '../../socket/socket';
 import './ComposeEmailPage.css';
+import { Redirect } from 'react-router-dom';
+import UsersUtils from '../../Utils/UsersUtils';
 
 
 export default function ComposeEmailPage() {
 
     const [receiver, setReceiver] = useState("");
+    const socket = Socket.Instance;
 
     useEffect(() => {
-        const unsubscribe = Store.subscribe(() => {
-            const messageReceiver = Store.getState().composedMessage.receiverUsername;
-            setReceiver(messageReceiver);
-        });
-
-        return () => {
-            unsubscribe();
+        UsersUtils.handleUserLoggedStatus();
+        if (Store.getState().isLogged) {
+            
+            if (!socket.isConnectedToSocket) {
+                socket.initiateSocket();
+            }
+            const unsubscribe = Store.subscribe(() => {
+                const messageReceiver = Store.getState().composedMessage.receiverUsername;
+                setReceiver(messageReceiver);
+            });
+    
+            return () => {
+                unsubscribe();
+            }
         }
     }, []);
 
@@ -37,13 +48,18 @@ export default function ComposeEmailPage() {
         Store.dispatch({type: ActionType.UpdateMessageContent, payload: contentValue});
     }
 
-    const onSendMessageClick = (): void => {
-        const composedMessageFromStore = Store.getState().composedMessage;
-        MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
+    const onSendMessageClick = async (): Promise<void> => {
+        if (MessagesUtils.validateMessage()) {
+            const composedMessageFromStore = Store.getState().composedMessage;
+            const messageID = await MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
+            const convertedMessageForDisplay = MessagesUtils.convertMessageForDisplay(messageID, composedMessageFromStore);
+            socket.emitMessage(convertedMessageForDisplay);
+        }
     }
 
 
     return (
+        Store.getState().isLogged ?
         <div className="composeEmailPage">
             <h1 className="composeEmailHeader">Compose An Email</h1>
 
@@ -79,5 +95,8 @@ export default function ComposeEmailPage() {
                 <SearchUsersSection />
             </form>
         </div>
+        :
+        <Redirect to="/welcome" />
+        
     )
 }

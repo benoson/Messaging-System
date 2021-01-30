@@ -9,6 +9,35 @@ import SuccessfulLoginResponse from './SuccessfulLoginResponse';
 
 export default class UsersUtils {
 
+
+    public static validateCredentials = (credentails: UserCredentialsDetails): boolean => {
+        try {
+            UsersUtils.validateUsername(credentails.username);
+            UsersUtils.validatePassword(credentails.password);
+            return true;
+        }
+        catch (error) {
+            alert(error);
+            return false;
+        }
+    }
+
+    public static validateUsername = (username: string): boolean => {
+        if (username.trim().length > 2 && username.trim().length < 11) {
+            return true;
+        }
+
+        throw new Error("Please Enter a Username between 3 - 10 characters");
+    }
+
+    public static validatePassword = (password: string): boolean => {
+        if (password.trim().length > 3 && password.trim().length < 11) {
+            return true;
+        }
+
+        throw new Error("Please Enter a Password between 4 - 10 characters");
+    }
+
     public static getAllUsersFromServer = async (): Promise<void> => {
         try {
             Interceptor.interceptRequest();
@@ -23,17 +52,18 @@ export default class UsersUtils {
     public static login = async (loginData: UserCredentialsDetails): Promise<void> => {
         try {
             const successfulLoginResponse = await axios.post<SuccessfulLoginResponse>("http://localhost:3001/users/login", loginData);
-            UsersUtils.saveLoginDetailsToSessionStorage(successfulLoginResponse.data);
+            UsersUtils.saveLoginDetailsToLocalStorage(successfulLoginResponse.data);
+            UsersUtils.changeUserLoggedStatus(true);
         }
         catch (error) {
-            alert(error.response.data.errorMessage);
+            throw new Error(error.response.data.errorMessage);
         }
     }
 
     public static register = async (registrationData: UserCredentialsDetails): Promise<void> => {
         try {
             const successfulLoginResponse = await axios.post<SuccessfulLoginResponse>("http://localhost:3001/users/", registrationData);
-            UsersUtils.saveLoginDetailsToSessionStorage(successfulLoginResponse.data);
+            UsersUtils.saveLoginDetailsToLocalStorage(successfulLoginResponse.data);
         }
         catch (error) {
             alert(error.response.data.errorMessage);
@@ -44,7 +74,32 @@ export default class UsersUtils {
         return allUsers.filter( user => user.username.includes(searchValue.trim()) && searchValue.trim() !== "");
     }
 
-    public static saveLoginDetailsToSessionStorage = (successfulLoginResponse: SuccessfulLoginResponse): void => {
-        sessionStorage.setItem('userInfo', JSON.stringify(successfulLoginResponse));
+    public static saveLoginDetailsToLocalStorage = (successfulLoginResponse: SuccessfulLoginResponse): void => {
+        localStorage.setItem('userInfo', JSON.stringify(successfulLoginResponse));
+    }
+
+    public static handleUserLoggedStatus = (): void => {
+        if (UsersUtils.isUserLogged()) {
+            UsersUtils.changeUserLoggedStatus(true);
+        }
+    }
+
+    public static changeUserLoggedStatus = (loggedStatus: boolean): void => {
+        Store.dispatch({type: ActionType.ChangeLoggedStatus, payload: loggedStatus});
+    }
+
+    public static isUserLogged = (): boolean => {
+        if (!Store.getState().isLogged) {
+            const userInfo = localStorage.getItem("userInfo");
+            if (userInfo !== null && JSON.parse(userInfo!).token !== undefined) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static logout = (): void => {
+        localStorage.removeItem("userInfo");
+        Store.dispatch({type: ActionType.ClearStore})
     }
 }
