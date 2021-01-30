@@ -1,5 +1,5 @@
 import TextField from '@material-ui/core/TextField';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useEffect } from 'react';
 import { ChangeEvent } from 'react';
 import { ActionType } from '../../redux/ActionType';
@@ -8,14 +8,15 @@ import MessagesUtils from '../../Utils/MessagesUtils';
 import CustomButton from '../custom-button/CustomButton';
 import SearchUsersSection from '../search-users-section/SearchUsersSection';
 import Socket from '../../socket/socket';
-import './ComposeEmailPage.css';
 import { Redirect } from 'react-router-dom';
 import UsersUtils from '../../Utils/UsersUtils';
+import './ComposeEmailPage.css';
 
 
 export default function ComposeEmailPage() {
 
     const [receiver, setReceiver] = useState("");
+    const formRef = useRef<HTMLFormElement>(null);
     const socket = Socket.Instance;
 
     useEffect(() => {
@@ -53,7 +54,10 @@ export default function ComposeEmailPage() {
             const composedMessageFromStore = Store.getState().composedMessage;
             const messageID = await MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
             const convertedMessageForDisplay = MessagesUtils.convertMessageForDisplay(messageID, composedMessageFromStore);
-            socket.emitMessage(convertedMessageForDisplay);
+            MessagesUtils.updateSentMessageInDisplay(convertedMessageForDisplay);
+            socket.emitMessage(convertedMessageForDisplay, composedMessageFromStore.receiverID);
+            Store.dispatch({type: ActionType.ClearMessage});
+            formRef.current!.reset();
         }
     }
 
@@ -63,9 +67,9 @@ export default function ComposeEmailPage() {
         <div className="composeEmailPage">
             <h1 className="composeEmailHeader">Compose An Email</h1>
 
-            <form className="composeEmailForm">
+            <form className="composeEmailForm" ref={formRef}>
                 <div className="composeEmailSectionLeft">
-                    <TextField className="inputField" label="Subject" onChange={handleSubjectValueChange} />
+                    <TextField required className="inputField" label="Subject" onChange={handleSubjectValueChange} />
 
                     <TextField
                         required

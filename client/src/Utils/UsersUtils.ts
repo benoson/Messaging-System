@@ -40,7 +40,6 @@ export default class UsersUtils {
 
     public static getAllUsersFromServer = async (): Promise<void> => {
         try {
-            Interceptor.interceptRequest();
             const allUsersFromServer = await axios.get<User[]>("http://localhost:3001/users/");
             Store.dispatch({type: ActionType.UpdateAllUsers, payload: allUsersFromServer.data});
         }
@@ -64,6 +63,7 @@ export default class UsersUtils {
         try {
             const successfulLoginResponse = await axios.post<SuccessfulLoginResponse>("http://localhost:3001/users/", registrationData);
             UsersUtils.saveLoginDetailsToLocalStorage(successfulLoginResponse.data);
+            UsersUtils.changeUserLoggedStatus(true);
         }
         catch (error) {
             alert(error.response.data.errorMessage);
@@ -99,7 +99,8 @@ export default class UsersUtils {
     }
 
     public static logout = (): void => {
+        Interceptor.interceptRequest();
         localStorage.removeItem("userInfo");
-        Store.dispatch({type: ActionType.ClearStore})
+        Store.dispatch({type: ActionType.ClearStore});
     }
 }

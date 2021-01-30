@@ -14,6 +14,17 @@ router.get('/', async (request, response, next) => {
     }
 });
 
+router.get('/sent', async (request, response, next) => {
+
+    try {
+        const allSentEmails = await messagesLogic.getAllSentEmails(request);
+        response.json(allSentEmails);
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+
 router.post('/', async (request, response, next) => {
 
     const message = request.body;
@@ -32,13 +43,14 @@ router.delete('/:id', async (request, response, next) => {
     const messageID = request.params.id;
     
     try {
-        const succesfullDeletionResponse = await messagesLogic.deleteMessage(request, messageID);
+        const succesfullDeletionResponse = await messagesLogic.deleteMessage(messageID);
         response.json(succesfullDeletionResponse);
     }
     catch (error) {
         return next(error);
     }
 });
+
 
 
 module.exports = router;

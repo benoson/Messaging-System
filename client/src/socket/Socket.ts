@@ -25,14 +25,16 @@ export default class Socket {
     }
     
     private registerSocketListeners = (): void => {
-    
         this.socketConnection.on('receive-message', (receivedMessage: ReceivedMessage) => {
-            
             Store.dispatch({type: ActionType.UpdateSingleMessage, payload: receivedMessage});
         });
     }
 
-    public emitMessage = (composedMessage: ReceivedMessage): void => {
-        this.socketConnection.emit('send-message', composedMessage);
+    public emitMessage = (composedMessage: ReceivedMessage, receiverID: number): void => {
+        this.socketConnection.emit('send-message', composedMessage, receiverID);
+    }
+
+    public deleteMessage = (messageID: number, senderID: number): void => {
+        this.socketConnection.emit('delete-message', messageID, senderID);
     }
 }

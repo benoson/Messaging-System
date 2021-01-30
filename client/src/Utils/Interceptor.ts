@@ -3,11 +3,11 @@ import axios from "axios";
 export default class Interceptor {
 
     public static interceptRequest = (): void => {
-        const userInfo = localStorage.getItem("userInfo");
+        const userInfoFromStorage = localStorage.getItem("userInfo");
 
-        if (userInfo !== null) {
-            if (JSON.parse(userInfo).token !== undefined) {
-                const bearerToken = "Bearer " + JSON.parse(userInfo).token;
+        if (userInfoFromStorage !== null) {
+            if (JSON.parse(userInfoFromStorage).token !== undefined) {
+                const bearerToken = "Bearer " + JSON.parse(userInfoFromStorage).token;
                 axios.defaults.headers.common['Authorization'] = bearerToken;
             }
         }

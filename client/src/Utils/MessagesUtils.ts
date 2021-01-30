@@ -5,6 +5,7 @@ import { ActionType } from "../redux/ActionType";
 import Store from "../redux/Store";
 import Interceptor from "./Interceptor";
 
+
 export default class MessagesUtils {
 
     public static validateMessage = (): boolean => {
@@ -20,26 +21,26 @@ export default class MessagesUtils {
         }
     }
 
-    public static validateMessageReceiver = () => {
+    public static validateMessageReceiver = (): boolean | void => {
         if (Store.getState().composedMessage.receiverID !== 0) {
             return true;
         }
         throw new Error("Invalid Message Receiver");
     }
 
-    public static validateMessageSubject = () => {
-        if (Store.getState().composedMessage.subject.trim() !== "") {
+    public static validateMessageSubject = (): boolean | void => {
+        if (Store.getState().composedMessage.subject.trim().length > 0 && Store.getState().composedMessage.subject.trim().length < 46) {
             return true;
         }
-        throw new Error("Invalid Message Subject");
+        throw new Error("Subject Should 1 - 45 Characters Long");
 
     }
 
-    public static validateMessageContent = () => {
-        if (Store.getState().composedMessage.content.trim() !== "") {
+    public static validateMessageContent = (): boolean | void => {
+        if (Store.getState().composedMessage.content.trim().length > 0 && Store.getState().composedMessage.content.trim().length < 1000) {
             return true;
         }
-        throw new Error("Invalid Message Content");
+        throw new Error("Content Should 1 - 999 Characters Long");
 
     }
 
@@ -49,10 +50,20 @@ export default class MessagesUtils {
         return newMessageID.data;
     }
 
+    public static updateSentMessageInDisplay = async (message: ReceivedMessage): Promise<void> => {
+        Store.dispatch({type: ActionType.UpdateSingleSentMessage, payload: message});
+    }
+
     public static getAllUserMessagesFromServer = async (): Promise<void> => {
         Interceptor.interceptRequest();
         const allUserMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/");
         Store.dispatch({type: ActionType.UpdateAllUserMessages, payload: allUserMessages.data});
+    }
+
+    public static getAllSentMessagesFromServer = async (): Promise<void> => {
+        Interceptor.interceptRequest();
+        const allSentMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/sent");
+        Store.dispatch({type: ActionType.UpdateAllSentMessages, payload: allSentMessages.data});
     }
 
     public static convertMessageForDisplay = (messageID: number, composedMessageFromStore: Message): ReceivedMessage => {
@@ -70,10 +81,10 @@ export default class MessagesUtils {
         return [day, month, year].join('/');
     }
 
-    public static deleteImage = async (messageIDtoDelete: number): Promise<void> => {
+    public static deleteMessage = async (messageIDtoDelete: number): Promise<void> => {
         await axios.delete<number>(`http://localhost:3001/messages/${messageIDtoDelete}`);
         const messageToDelete = Store.getState().allUserMessages.filter( message => message.ID === messageIDtoDelete);
         const indexOfMessageToDelete = Store.getState().allUserMessages.indexOf(messageToDelete[0]);
-        Store.dispatch({type: ActionType.DeleteMessage, payload: indexOfMessageToDelete});
+        Store.dispatch({type: ActionType.DeleteReceivedMessage, payload: indexOfMessageToDelete});
     }
 }

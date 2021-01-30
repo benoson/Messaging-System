@@ -68,14 +68,14 @@ const ErrorType = {
     INVALID_MESSAGE_SUBJECT: {
         id: 9,
         httpCode: 422,
-        message: "Invalid Message Subject",
+        message: "Subject Should Be Between 1 - 45 Characters Long",
         isShowStackTrace: true,
     },
 
     INVALID_MESSAGE_CONTENT: {
         id: 9,
         httpCode: 422,
-        message: "Invalid Message Content",
+        message: "Content Should Be Between 1 - 999 Characters Long",
         isShowStackTrace: true,
     }
 

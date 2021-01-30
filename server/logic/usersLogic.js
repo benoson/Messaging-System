@@ -39,9 +39,14 @@ const login = async (registrationInfo, isFreshUser) => {
     return new SuccesfulLoginServerResponse(token, userLoginResponse.username);
 }
 
+const logout = async (request) => {
+    UsersUtils.deleteUserFromCache(request);
+}
+
 
 module.exports = {
     addUser,
     login,
+    logout,
     getAllUsers
 }

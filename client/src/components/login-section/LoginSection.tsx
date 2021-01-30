@@ -29,13 +29,13 @@ export default function LoginSection() {
         }
     }
 
-    const onUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const onUsernameChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const usernameInput: HTMLInputElement = event.target;
         const usernameValue = usernameInput.value;
         setUsername(usernameValue);
     }
 
-    const onPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const onPasswordChange = (event: ChangeEvent<HTMLInputElement>): void => {
         const passwordInput: HTMLInputElement = event.target;
         const passwordValue = passwordInput.value;
         setPassword(passwordValue);

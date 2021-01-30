@@ -27,6 +27,17 @@ router.post('/', async (request, response, next) => {
     }
 });
 
+router.post('/logout', async (request, response, next) => {
+
+    try {
+        const succesfullLogoutResponse = await usersLogic.logout(request);
+        response.json(succesfullLogoutResponse);
+    }
+    catch (error) {
+        return next(error);
+    }
+});
+
 router.post('/login', async (request, response, next) => {
 
     const loginInfo = request.body;

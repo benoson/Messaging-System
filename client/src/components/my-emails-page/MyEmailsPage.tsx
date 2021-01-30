@@ -24,7 +24,7 @@ export default function MyEmails() {
             }
             checkIfShuoldGetAllEmailsFromServer();
             
-            const unsubscribe = Store.subscribe(() => {
+            const unsubscribe = Store.subscribe((): void => {
                 const allUserMessagesFromStore = Store.getState().allUserMessages;
                 setMyEmails(allUserMessagesFromStore);
             });
@@ -54,12 +54,12 @@ export default function MyEmails() {
                     <div>
                         <h1 className="myEmailsHeader">My Emails</h1>
                         {myEmails.map( (email, index) =>
-                            <Email key={index} {...email} />
+                            <Email key={index} email={email} isShowDeleteButton={true} />
                         )}
                     </div>
                 :
                     <div>
-                        <h1>No Email Yet</h1>
+                        <h1>No Emails Yet</h1>
                         <img className="noEmailsSVG" src={NoEmails} alt="no-emails"/>
                     </div>}
             </div>

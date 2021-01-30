@@ -28,6 +28,17 @@ export default function LeftSidebar() {
                     hoverTextColor="white"
                 />
             </NavLink>
+
+            <NavLink to="/sentEmails" className="navLinkItem">
+                <CustomButton
+                    buttonText="Sent"
+                    backgroundColor="transparent"
+                    textColor="lightseagreen"
+                    borderColor="lightseagreen"
+                    hoverBgColor="lightseagreen"
+                    hoverTextColor="white"
+                />
+            </NavLink>
         </div>
     )
 }

@@ -13,6 +13,7 @@ export default function SearchUsersSection() {
     const [allUsers, setAllUsers] = useState<User[]>(new Array<User>());
     const [filteredUsers, setFilteredUsers] = useState<User[]>(new Array<User>());
 
+
     useEffect(() => {
         checkIfShouldGetAllUsersFromServer();
         
@@ -45,13 +46,18 @@ export default function SearchUsersSection() {
         setSearchValue(searchValue);
     }
 
+    const clearSearchList = (): void => {
+        setSearchValue("");
+        setFilteredUsers(new Array <User> ());
+    }
+
     return (
         <div className="composeEmailSectionRight">
             <TextField onChange={onSearchUserInputChange} value={searchValue} required label="Search For a User" />
 
             <div className="allUsersItemsSection">
                 {filteredUsers.map( (user, index) => 
-                    <UserItem key={index} {...user} />
+                    <UserItem key={index} user={user} clearSearchList={clearSearchList} />
                 )}
             </div>
         </div>

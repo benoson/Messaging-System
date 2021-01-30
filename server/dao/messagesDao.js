@@ -17,6 +17,20 @@ const getAllUserEmails = async (userID) => {
     }
 }
 
+const getAllSentEmails = async (userID) => {
+    const SQL = "SELECT ID, (SELECT USERNAME FROM users WHERE ID = messages.RECEIVER) as senderUsername, MESSAGE as content, SUBJECT as subject, DATE_FORMAT(CREATION_DATE, '%d/%m/%Y') as creationDate FROM messages WHERE SENDER = ?";
+    const parameters = [userID];
+    
+    try {
+        const allSentEmails = await connection.executeWithParameters(SQL, parameters);
+        return allSentEmails;
+    }
+    
+    catch (error) {
+        throw new ServerError(ErrorType.GENERAL_ERROR, SQL, error);
+    }
+}
+
 const saveMessage = async (userID, message) => {
     const SQL = "INSERT INTO messages (SENDER, RECEIVER, MESSAGE, SUBJECT, CREATION_DATE) VALUES(?, ?, ?, ?, ?)";
     const parameters = [userID, message.receiverID, message.content, message.subject, message.creationDate];
@@ -31,9 +45,9 @@ const saveMessage = async (userID, message) => {
     }
 }
 
-const deleteMessage = async (userID, messageID) => {
-    const SQL = "DELETE FROM messages WHERE ID = ? AND RECEIVER = ?";
-    const parameters = [messageID, userID];
+const deleteMessage = async (messageID) => {
+    const SQL = "UPDATE messages SET RECEIVER = ? WHERE ID = ?";
+    const parameters = [null, messageID];
     
     try {
         await connection.executeWithParameters(SQL, parameters);
@@ -47,6 +61,7 @@ const deleteMessage = async (userID, messageID) => {
 
 module.exports = {
     getAllUserEmails,
+    getAllSentEmails,
     saveMessage,
     deleteMessage
 };

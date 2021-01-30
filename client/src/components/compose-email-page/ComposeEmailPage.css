@@ -34,3 +34,13 @@
 .receiverName {
     color: lightseagreen;
 }
+
+
+@media screen and (max-width: 1200px) {
+    .composeEmailForm {
+        flex-direction: column-reverse;
+    }
+    .composeEmailSectionLeft, .composeEmailSectionRight {
+        width: 80%;
+    }
+}

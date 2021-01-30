@@ -17,3 +17,18 @@
 .msLogoImage {
     height: 80px;
 }
+
+.usernameTextSection {
+    display: flex;
+    align-items: center;
+}
+
+.usernameText::before {
+    content: 'Welcome, ';
+}
+
+.usernameText {
+    color: white;
+    margin: 0 10px 0 0;
+    padding: 0;
+}

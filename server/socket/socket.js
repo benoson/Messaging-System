@@ -1,3 +1,6 @@
+const ErrorType = require('../errors/errorType');
+const ServerError = require('../errors/serverError');
+
 const registerSocketConnections = (server) => {
 
     const usersIDSocketMap = require('../models/UsersIDSocketMap');
@@ -13,14 +16,17 @@ const registerSocketConnections = (server) => {
     io.on('connection', (socket) => {
         const handshakeData = socket.request;
         const userToken = handshakeData._query['userToken'];
-        const userCacheData = usersDataCache.get(userToken);
+        const userData = usersDataCache.get(userToken);
 
-        if (userCacheData !== undefined) {
-            const userID = userCacheData.userID;
+        if (userData !== undefined) {
+            const userID = userData.ID;
             usersIDSocketMap.set(userID, socket);
 
-            socket.on('send-message', (message) => {
-                socket.broadcast.emit('receive-message', message);
+            socket.on('send-message', (message, receiverID) => {
+                const receiver = usersIDSocketMap.get(receiverID);
+                if (receiver !== undefined) {
+                    io.to(receiver.id).emit('receive-message', message);
+                }
             });
         }
 

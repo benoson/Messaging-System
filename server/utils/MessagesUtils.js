@@ -23,14 +23,14 @@ class MessagesUtils {
     }
     
     static validateMessageSubject = (subject) => {
-        if (subject.trim() !== "") {
+        if (subject.trim().length > 0 && subject.trim.length < 46) {
             return true;
         }
         throw new ServerError(ErrorType.INVALID_MESSAGE_SUBJECT);
     }
     
     static validateMessageContent = (content) => {
-        if (content.trim() !== "") {
+        if (content.trim().length > 0 && content.trim().length < 1000) {
             return true;
         }
         throw new ServerError(ErrorType.INVALID_MESSAGE_CONTENT);

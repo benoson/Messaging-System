@@ -1,9 +1,9 @@
 .email {
-    padding: 7px;
+    padding: 10px;
 }
 
 .email:nth-child(odd) {
-    background-color: rgba(218, 218, 218, 0.719);
+    background-color: rgba(228, 228, 228, 0.719);
 }
 
 .sharp {
@@ -12,6 +12,7 @@
 
 .contentText {
     color: purple;
+    overflow-wrap: anywhere;
 }
 
 .emailBodySection {

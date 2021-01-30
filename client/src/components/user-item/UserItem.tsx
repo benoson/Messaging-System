@@ -4,10 +4,16 @@ import Store from '../../redux/Store';
 import './UserItem.css';
 
 
-export default function UserItem(user: User) {
+interface userItem {
+    user: User,
+    clearSearchList: Function
+}
+
+export default function UserItem({user, clearSearchList}: userItem) {
 
     const handleSearchedUserClick = ():void  => {
         Store.dispatch({type: ActionType.UpdateMessageReceiver, payload: {ID: user.ID, username: user.username}});
+        clearSearchList();
     }
 
     return (

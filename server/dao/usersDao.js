@@ -45,10 +45,6 @@ const addUser = async (registrationInfo) => {
     }
 }
 
-/**
- * 
- * @param {{username: string, password: string | number}} userLoginInfo 
- */
 const login = async (userLoginInfo) => {
     const SQL = "SELECT ID, USERNAME as username FROM users where USERNAME = ? and PASSWORD = ?";
     const parameters = [userLoginInfo.username, userLoginInfo.password];

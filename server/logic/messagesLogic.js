@@ -8,6 +8,11 @@ const getAllUserEmails = async (request) => {
     return await messagesDao.getAllUserEmails(userID);
 }
 
+const getAllSentEmails = async (request) => {
+    const userID = UsersUtils.extractUserInfoFromCache(request).ID;
+    return await messagesDao.getAllSentEmails(userID);
+}
+
 const saveMessage = async (request, message) => {
     MessagesUtils.validateMessage(message)
     const userID = UsersUtils.extractUserInfoFromCache(request).ID;
@@ -15,14 +20,15 @@ const saveMessage = async (request, message) => {
     return await messagesDao.saveMessage(userID, message);
 }
 
-const deleteMessage = async (request, messageID) => {
-    const userID = UsersUtils.extractUserInfoFromCache(request).ID;
-    return await messagesDao.deleteMessage(userID, messageID);
+const deleteMessage = async (messageID) => {
+    return await messagesDao.deleteMessage(messageID);
 }
+
 
 
 module.exports = {
     getAllUserEmails,
+    getAllSentEmails,
     saveMessage,
     deleteMessage
 }

@@ -5,6 +5,7 @@ import ComposeEmailPage from './compose-email-page/ComposeEmailPage';
 import MyEmailsPage from './my-emails-page/MyEmailsPage';
 import WelcomePage from './welcome-page/WelcomePage';
 import './App.css';
+import SentEmailsPage from './sent-emails/SentEmailsPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
                 <Switch>
                   <Route path="/welcome" component={WelcomePage} exact />
                   <Route path="/myEmails" component={MyEmailsPage} exact />
+                  <Route path="/sentEmails" component={SentEmailsPage} exact />
                   <Route path="/compose" component={ComposeEmailPage} exact />
 
                   <Redirect from="/" to="/welcome" exact />
