@@ -9,6 +9,7 @@ const messagesController = require('./controllers/messagesController');
 
 
 const server = express();
+server.use(express.static(__dirname));
 server.use(express.json());
 server.use(cors());
 server.use(loginFilter());

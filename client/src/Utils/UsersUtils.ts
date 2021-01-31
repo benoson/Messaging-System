@@ -100,8 +100,13 @@ export default class UsersUtils {
 
     public static logout = async (): Promise<void> => {
         Interceptor.interceptRequest();
-        await axios.post<Promise<void>>("http://localhost:3001/users/logout");
-        localStorage.removeItem("userInfo");
-        Store.dispatch({type: ActionType.ClearStore});
+        try {
+            await axios.post<Promise<void>>("http://localhost:3001/users/logout");
+            localStorage.removeItem("userInfo");
+            Store.dispatch({type: ActionType.ClearStore});
+        }
+        catch (error) {
+            alert(error);
+        }
     }
 }

@@ -45,25 +45,41 @@ export default class MessagesUtils {
     }
 
     public static sendMessageToSelectedUser = async (message: Message): Promise<number> => {
-        Interceptor.interceptRequest();
-        const newMessageID = await axios.post<number>("http://localhost:3001/messages/", message);
-        return newMessageID.data;
+        try {
+            Interceptor.interceptRequest();
+            const newMessageID = await axios.post<number>("http://localhost:3001/messages/", message);
+            return newMessageID.data;
+        }
+        catch (error) {
+            alert(error);
+            throw new Error(error)
+        }
     }
 
-    public static updateSentMessageInDisplay = async (message: ReceivedMessage): Promise<void> => {
+    public static updateSentMessageInDisplay = (message: ReceivedMessage): void => {
         Store.dispatch({type: ActionType.UpdateSingleSentMessage, payload: message});
     }
 
     public static getAllUserMessagesFromServer = async (): Promise<void> => {
-        Interceptor.interceptRequest();
-        const allUserMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/");
-        Store.dispatch({type: ActionType.UpdateAllUserMessages, payload: allUserMessages.data});
+        try {
+            Interceptor.interceptRequest();
+            const allUserMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/");
+            Store.dispatch({type: ActionType.UpdateAllUserMessages, payload: allUserMessages.data});
+        }
+        catch (error) {
+            alert(error);
+        }
     }
 
     public static getAllSentMessagesFromServer = async (): Promise<void> => {
-        Interceptor.interceptRequest();
-        const allSentMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/sent");
-        Store.dispatch({type: ActionType.UpdateAllSentMessages, payload: allSentMessages.data});
+        try {
+            Interceptor.interceptRequest();
+            const allSentMessages = await axios.get<ReceivedMessage[]>("http://localhost:3001/messages/sent");
+            Store.dispatch({type: ActionType.UpdateAllSentMessages, payload: allSentMessages.data});
+        }
+        catch (error) {
+            alert(error);
+        }
     }
 
     public static convertMessageForDisplay = (messageID: number, composedMessageFromStore: Message): ReceivedMessage => {
@@ -82,9 +98,14 @@ export default class MessagesUtils {
     }
 
     public static deleteMessage = async (messageIDtoDelete: number): Promise<void> => {
-        await axios.delete<number>(`http://localhost:3001/messages/${messageIDtoDelete}`);
-        const messageToDelete = Store.getState().allUserMessages.filter( message => message.ID === messageIDtoDelete);
-        const indexOfMessageToDelete = Store.getState().allUserMessages.indexOf(messageToDelete[0]);
-        Store.dispatch({type: ActionType.DeleteReceivedMessage, payload: indexOfMessageToDelete});
+        try {
+            await axios.delete<number>(`http://localhost:3001/messages/${messageIDtoDelete}`);
+            const messageToDelete = Store.getState().allUserMessages.filter( message => message.ID === messageIDtoDelete);
+            const indexOfMessageToDelete = Store.getState().allUserMessages.indexOf(messageToDelete[0]);
+            Store.dispatch({type: ActionType.DeleteReceivedMessage, payload: indexOfMessageToDelete});
+        }
+        catch (error) {
+            alert(error);
+        }
     }
 }

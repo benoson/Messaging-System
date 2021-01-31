@@ -52,12 +52,17 @@ export default function ComposeEmailPage() {
     const onSendMessageClick = async (): Promise<void> => {
         if (MessagesUtils.validateMessage()) {
             const composedMessageFromStore = Store.getState().composedMessage;
-            const messageID = await MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
-            const convertedMessageForDisplay = MessagesUtils.convertMessageForDisplay(messageID, composedMessageFromStore);
-            MessagesUtils.updateSentMessageInDisplay(convertedMessageForDisplay);
-            socket.emitMessage(convertedMessageForDisplay, composedMessageFromStore.receiverID);
-            Store.dispatch({type: ActionType.ClearMessage});
-            formRef.current!.reset();
+            try {
+                const messageID = await MessagesUtils.sendMessageToSelectedUser(composedMessageFromStore);
+                const convertedMessageForDisplay = MessagesUtils.convertMessageForDisplay(messageID, composedMessageFromStore);
+                MessagesUtils.updateSentMessageInDisplay(convertedMessageForDisplay);
+                socket.emitMessage(convertedMessageForDisplay, composedMessageFromStore.receiverID);
+                Store.dispatch({type: ActionType.ClearMessage});
+                formRef.current!.reset();
+            }
+            catch (error) {
+                alert(error);
+            }
         }
     }
 

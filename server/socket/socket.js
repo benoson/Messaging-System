@@ -1,6 +1,3 @@
-const ErrorType = require('../errors/errorType');
-const ServerError = require('../errors/serverError');
-
 const registerSocketConnections = (server) => {
 
     const usersIDSocketMap = require('../models/UsersIDSocketMap');
