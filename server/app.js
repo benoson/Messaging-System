@@ -10,7 +10,7 @@ const messagesController = require('./controllers/messagesController');
 
 const server = express();
 server.use(express.json());
-server.use( cors({origin: 'http://localhost:3000'}) );
+server.use(cors());
 server.use(loginFilter());
 server.use('/users', usersController);
 server.use('/messages', messagesController);

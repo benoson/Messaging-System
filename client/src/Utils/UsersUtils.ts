@@ -98,8 +98,9 @@ export default class UsersUtils {
         return false;
     }
 
-    public static logout = (): void => {
+    public static logout = async (): Promise<void> => {
         Interceptor.interceptRequest();
+        await axios.post<Promise<void>>("http://localhost:3001/users/logout");
         localStorage.removeItem("userInfo");
         Store.dispatch({type: ActionType.ClearStore});
     }
