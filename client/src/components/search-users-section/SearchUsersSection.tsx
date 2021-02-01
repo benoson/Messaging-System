@@ -15,7 +15,7 @@ export default function SearchUsersSection() {
 
 
     useEffect(() => {
-        checkIfShouldGetAllUsersFromServer();
+        getAllUsersFromServer();
         
         const unsubscribe = Store.subscribe(() => {
             const allUsersFromStore = Store.getState().allUsers;
@@ -28,14 +28,8 @@ export default function SearchUsersSection() {
     }, []);
 
 
-    const checkIfShouldGetAllUsersFromServer = async (): Promise<void> => {
-        const allUsersFromStore = Store.getState().allUsers;
-        if (allUsersFromStore.length === 0) {
-            await UsersUtils.getAllUsersFromServer();
-        }
-        else {
-            setAllUsers(allUsersFromStore);
-        }
+    const getAllUsersFromServer = async (): Promise<void> => {
+        await UsersUtils.getAllUsersFromServer();
     }
 
     const onSearchUserInputChange = (event: ChangeEvent <HTMLInputElement>): void => {
